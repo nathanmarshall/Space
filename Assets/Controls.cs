@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class Controls : MonoBehaviour {
 
-    private Vector3 playerPrevPosition;
-    private Vector3 playerCurrentPosition;
-    private Vector3 weaponPrevPosition;
-    private Vector3 weaponCurrentPosition;
-    private float   angle;
+    public Chase chase;
 
-    public Movement playerMovment;
-    public Movement weaponMovment;
-    public Weapon weapon;
+    private Vector3 prevPosition;
 
     // Use this for initialization
     void Start () {
@@ -22,19 +16,20 @@ public class Controls : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetMouseButton(0))
+        Vector3 detlaPosition = new Vector3(0, 0, 0);
+
+        if (
+            Input.touchCount > 0 &&
+            Input.GetTouch(0).phase == TouchPhase.Moved
+        )
         {
-            playerCurrentPosition = Input.mousePosition;
-            playerMovment.rotate(playerPrevPosition, playerCurrentPosition);
-            playerPrevPosition = playerCurrentPosition;
+            Vector3 position = Camera.main.ScreenToWorldPoint(
+                Input.GetTouch(0).position
+            );
+            detlaPosition = position - prevPosition;
+            prevPosition = position;
         }
 
-        if (Input.GetMouseButton(1))
-        {
-            weaponCurrentPosition = Input.mousePosition;
-            weaponMovment.rotate(weaponPrevPosition, weaponCurrentPosition);
-            weapon.fire(weaponPrevPosition, weaponCurrentPosition);
-            weaponPrevPosition = weaponCurrentPosition;
-        }
+        chase.move(detlaPosition);
     }
 }

@@ -23,7 +23,7 @@ public class Weapon : MonoBehaviour {
         );
     }
 
-    public void fire(Vector3 prevPosition, Vector3 currentPosition)
+    public void fire()
     {
         if (Time.time > lastShot + rateOfFire)
         {
